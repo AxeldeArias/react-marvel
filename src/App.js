@@ -1,16 +1,8 @@
-import React from 'react';
-import './App.css';
-import MiApp from './components/index'
-
-
-
+import React from "react";
+import ThemeProvider from "./components/ThemeProvider";
 
 function App() {
-  return (
-    <div className="App">
-      <MiApp/>
-    </div>
-  );
+  return <ThemeProvider />;
 }
 
 export default App;
