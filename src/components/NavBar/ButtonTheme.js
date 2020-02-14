@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { THEME } from "../themes";
 
@@ -16,30 +16,18 @@ const ButtonTheme = styled.button`
     text-decoration: none;
   }
 `;
-export default () => {
-  const isInitialMount = useRef(true);
-  const themeContext = useContext(ThemeContext);
-  const [state, setState] = useState(themeContext.default);
 
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      if (state === THEME.dark) {
-        //Light
-        themeContext.changeTheme(THEME.dark);
-      } else if (state === THEME.light) {
-        //Dark
-        themeContext.changeTheme(THEME.light);
-      }
-    }
-  }, [state]);
+export default () => {
+  const themeContext = useContext(ThemeContext);
+  const [state, setState] = useState(THEME.dark);
 
   const updateState = () => {
     if (state === THEME.dark) {
       setState(THEME.light);
+      themeContext.changeTheme(THEME.light);
     } else if (state === THEME.light) {
       setState(THEME.dark);
+      themeContext.changeTheme(THEME.dark);
     }
   };
 

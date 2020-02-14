@@ -32,7 +32,6 @@ export default () => {
 
   const changeTheme = nameTheme => {
     setTheme(() => ({ default: nameTheme, ...ESTILOS[nameTheme] }));
-    console.warn({ ...theme, ...ESTILOS[nameTheme] });
   };
 
   return (

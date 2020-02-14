@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import Card from "./card";
+import { ProviderHero } from "./ProviderHero/index";
 
 // Contenedor de Cards
 const ContainerHero = styled.section`
@@ -32,8 +33,13 @@ const ContainerHero = styled.section`
   }
 `;
 
-export default ({ data }) => {
-  let cards = data.map((element, index) => <Card key={index}>{element}</Card>);
-
-  return <ContainerHero>{cards}</ContainerHero>;
+export default () => {
+  const providerHero = useContext(ProviderHero);
+  return (
+    <ContainerHero>
+      {providerHero.listHeroes.map((element, index) => {
+        return <Card key={index}>{element}</Card>;
+      })}
+    </ContainerHero>
+  );
 };

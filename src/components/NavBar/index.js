@@ -36,7 +36,7 @@ export default props => {
       <Logo>
         <img src={require("../../assets/images/logo-marvel.png")} alt="logo" />
       </Logo>
-      <Seeker onChange={props.onChange} />
+      <Seeker />
       <ContainerButton>
         <ButtonTheme />
       </ContainerButton>
