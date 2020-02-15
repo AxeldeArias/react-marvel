@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ProviderHero } from "./ProviderHero/index";
 import ListItems from "./ListItems";
 import NavBar from "./NavBar/index";
@@ -24,14 +24,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  ${NavBar} {
+  nav {
     flex: auto 0 0;
   }
 `;
 
 export default () => {
   const [listHeroes, setHeroes] = useState([]);
-
+  
   return (
     <ProviderHero.Provider value={{ listHeroes, setHeroes }}>
       <MainContainer>

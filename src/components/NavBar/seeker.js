@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ProviderHero } from "../ProviderHero/index";
+let md5 = require("md5");
 
 const Lupa = styled.div`
   display: flex;
@@ -26,7 +27,7 @@ const ContainerInput = styled.div`
       width: 100%;
     }
   }
-  ${Lupa} {
+  ${Lupa}  {
     position: absolute;
     border-right: 1.5px solid #eee;
     top: 3px;
@@ -38,14 +39,19 @@ const ContainerInput = styled.div`
   }
 `;
 
-export default props => {
-  const providerHero = useContext(ProviderHero);
-  const [find, setFind] = useState("");
+
+export default class Seeker extends React.Component{
+
+  static contextType  = ProviderHero;
+  
+  componentDidMount(){
+    this.getHeroes("")
+  
+  }
 
   //Rutina que trae personajes
   //Se ejecuta al inciar y cada vez que se escribe en el buscador
-  useEffect(() => {
-    let md5 = require("md5");
+  getHeroes = (HeroesName) => {
     let apikey = "244d171c01b75643f3d17d51e3c13238";
     let privatekey = "b06821a19c58afa31fb67fb0a699b64efd2b0d5f";
     let ts = new Date().getTime();
@@ -54,34 +60,32 @@ export default props => {
     let limit = 8;
     let baseUrl = "https://gateway.marvel.com:443/v1/public/characters";
 
-    const params = new URLSearchParams({
-      ts,
-      apikey,
-      hash,
-      limit
-    });
     let url = `${baseUrl}?ts=${ts}&apikey=${apikey}&hash=${hash}&limit=${limit}`;
 
-    if (find !== "") {
-      url = url.concat(`&nameStartsWith=${find}`);
+    if (HeroesName !== "") {
+      url = url.concat(`&nameStartsWith=${HeroesName}`);
     }
 
     fetch(url)
       .then(res => res.json())
       .then(res => {
         //Actualizo Provider (asi el resto de componentes lo pueden consumir)
-        providerHero.setHeroes(res.data.results);
+        this.context.setHeroes(res.data.results);
       })
       .catch(e => console.log(e));
-  }, [find]);
+  }
 
-  return (
+  
+  render(){
+   return(
     <ContainerInput>
       <Lupa>
-        <img src={require("../../assets/images/lupa.jpg")} />
+        <img src={require("../../assets/images/lupa.jpg")} alt={"search"}/>
       </Lupa>
       {/* actualizo la busqueda con cada cambio */}
-      <input autoFocus onChange={e => setFind(e.target.value)} />
-    </ContainerInput>
-  );
-};
+      <input autoFocus onChange={e => this.getHeroes(e.target.value)} />
+    </ContainerInput>)
+  }
+  
+ 
+}
