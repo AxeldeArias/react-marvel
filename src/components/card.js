@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+import ProviderHero from "./ProviderHero/index";
 
 const ContainerHero = styled.div`
   display: flex;
@@ -44,16 +46,33 @@ const Card = styled.article`
   }
 `;
 
-export default props => {
-  const { name, thumbnail } = props.children;
-  //genero la ruta de la imagen
-  const imagen = `${thumbnail.path}/portrait_xlarge.${thumbnail.extension}`;
-  return (
-    <Card>
-      <ContainerHero>
-        <img src={imagen} alt="Hero" />
-        <div>{name}</div>
-      </ContainerHero>
-    </Card>
-  );
-};
+export default Object.assign(
+  props => {
+    const providerHero = useContext(ProviderHero);
+    const { name, thumbnail, id } = props.children;
+    // genero la ruta de la imagen
+    const imagen = `${thumbnail.path}/portrait_xlarge.${thumbnail.extension}`;
+    return (
+      <Card
+        onClick={() => {
+          providerHero.setModal({
+            modalVisible: true,
+            modalIdHero: id
+          });
+        }}
+      >
+        <ContainerHero>
+          <img src={imagen} alt="Hero" />
+          <div>{name}</div>
+        </ContainerHero>
+      </Card>
+    );
+  },
+  {
+    propTypes: {
+      name: PropTypes.string,
+      thumbnail: PropTypes.string,
+      id: PropTypes.string
+    }
+  }
+);

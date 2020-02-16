@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import HomeScreen from "./HomeScreen";
-import { THEME, ESTILOS } from "./themes";
-import { ThemeProvider, createGlobalStyle } from "styled-components";
+import React, { useState } from 'react';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
+import HomeScreen from './HomeScreen';
+import { THEME, ESTILOS, MEDIAS } from './themes';
 
 const GlobalStyle = createGlobalStyle`
     html{
@@ -24,14 +24,19 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default () => {
-  //aplicamos tema dark por defecto
+  // aplicamos tema dark por defecto
   const [theme, setTheme] = useState({
     default: THEME.dark,
-    ...ESTILOS[THEME.dark]
+    ...MEDIAS,
+    ...ESTILOS[THEME.dark],
   });
 
   const changeTheme = nameTheme => {
-    setTheme(() => ({ default: nameTheme, ...ESTILOS[nameTheme] }));
+    setTheme(state => ({
+      ...state,
+      default: nameTheme,
+      ...ESTILOS[nameTheme],
+    }));
   };
 
   return (

@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Card from "./card";
-import { ProviderHero } from "./ProviderHero/index";
+import ProviderHero from "./ProviderHero/index";
 
 // Contenedor de Cards
 const ContainerHero = styled.section`
@@ -13,33 +14,46 @@ const ContainerHero = styled.section`
   background: ${props => props.theme.secondary};
   flex-wrap: wrap;
   padding: 5px;
-  article {
-    flex: 25% 0 0;
-  }
-  @media screen and (max-width: 515px) {
+
+  @media screen and (min-width: ${props => props.theme.desktop}) {
     article {
-      flex: 100% 0 0;
+      flex: 25% 0 0;
     }
   }
-  @media screen and (max-width: 579px) and (min-width: 516px) {
-    article {
-      flex: 50% 0 0;
-    }
-  }
-  @media screen and (max-width: 750px) and (min-width: 580px) {
+
+  @media screen and (max-width: ${props =>
+      props.theme.desktop}) and (min-width: ${props => props.theme.tablet}) {
     article {
       flex: 33% 0 0;
     }
   }
+
+  @media screen and (max-width: ${props =>
+      props.theme.tablet}) and (min-width: ${props => props.theme.mobile}) {
+    article {
+      flex: 50% 0 0;
+    }
+  }
+
+  @media screen and (max-width: ${props => props.theme.mobile}) {
+    article {
+      flex: 100% 0 0;
+    }
+  }
 `;
 
-export default () => {
-  const providerHero = useContext(ProviderHero);
-  return (
-    <ContainerHero>
-      {providerHero.listHeroes.map((element, index) => {
-        return <Card key={index}>{element}</Card>;
-      })}
-    </ContainerHero>
-  );
-};
+export default Object.assign(
+  () => {
+    const providerHero = useContext(ProviderHero);
+
+    return (
+      <ContainerHero>
+        {console.log(providerHero.listHeroes)}
+        {providerHero.listHeroes.map(element => (
+          <Card key={String(element.id)}>{element}</Card>
+        ))}
+      </ContainerHero>
+    );
+  },
+  { propTypes: { children: PropTypes.node } }
+);

@@ -10,6 +10,8 @@ const ButtonTheme = styled.button`
   background-color: white;
   border-radius: 6px;
   border: 2px solid grey;
+  white-space: nowrap;
+  width: 100px;
   &.boton_personalizado:hover {
     color: #eee;
     background-color: #ffffff;

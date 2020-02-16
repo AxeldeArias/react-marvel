@@ -9,7 +9,8 @@ const ContainerButton = styled.div``;
 const NavBar = styled.nav`
   display: flex;
   justify-content: space-between;
-  @media screen and (max-width: 699px) {
+
+  @media screen and (max-width: ${props => props.theme.desktop}) {
     flex-wrap: wrap;
   }
   align-items: center;
@@ -30,16 +31,14 @@ const NavBar = styled.nav`
   }
 `;
 
-export default props => {
-  return (
-    <NavBar>
-      <Logo>
-        <img src={require("../../assets/images/logo-marvel.png")} alt="logo" />
-      </Logo>
-      <Seeker />
-      <ContainerButton>
-        <ButtonTheme />
-      </ContainerButton>
-    </NavBar>
-  );
-};
+export default () => (
+  <NavBar>
+    <Logo>
+      <img src={require("../../assets/images/logo-marvel.png")} alt="logo" />
+    </Logo>
+    <Seeker />
+    <ContainerButton>
+      <ButtonTheme />
+    </ContainerButton>
+  </NavBar>
+);

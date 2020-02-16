@@ -6,7 +6,13 @@ const THEME = {
   light: THEMELIGHT
 };
 
-//defino los temas
+const MEDIAS = {
+  desktop: "900px",
+  tablet: "700px",
+  mobile: "560px"
+};
+
+// defino los temas
 const ESTILOS = {};
 
 ESTILOS[THEMEDARK] = {
@@ -21,4 +27,4 @@ ESTILOS[THEMELIGHT] = {
   tertiary: "#9C9C9C",
   quaternary: "dark"
 };
-export { THEME, ESTILOS };
+export { THEME, ESTILOS, MEDIAS };

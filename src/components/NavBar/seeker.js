@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { ProviderHero } from "../ProviderHero/index";
-let md5 = require("md5");
+import ProviderHero from "../ProviderHero/index";
+
+const md5 = require("md5");
 
 const Lupa = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const ContainerInput = styled.div`
     padding: 0.5rem 0.5rem 10px 35px;
   }
 
-  @media screen and (max-width: 699px) {
+  @media screen and (max-width: ${props => props.theme.desktop}) {
     margin-top: 5px;
     flex-basis: 100%;
     order: 2;
@@ -27,7 +28,7 @@ const ContainerInput = styled.div`
       width: 100%;
     }
   }
-  ${Lupa}  {
+  ${Lupa} {
     position: absolute;
     border-right: 1.5px solid #eee;
     top: 3px;
@@ -39,26 +40,23 @@ const ContainerInput = styled.div`
   }
 `;
 
+export default class Seeker extends React.Component {
+  static contextType = ProviderHero;
 
-export default class Seeker extends React.Component{
-
-  static contextType  = ProviderHero;
-  
-  componentDidMount(){
-    this.getHeroes("")
-  
+  componentDidMount() {
+    this.getHeroes("");
   }
 
-  //Rutina que trae personajes
-  //Se ejecuta al inciar y cada vez que se escribe en el buscador
-  getHeroes = (HeroesName) => {
-    let apikey = "244d171c01b75643f3d17d51e3c13238";
-    let privatekey = "b06821a19c58afa31fb67fb0a699b64efd2b0d5f";
-    let ts = new Date().getTime();
-    let stringToHash = ts + privatekey + apikey;
-    let hash = md5(stringToHash);
-    let limit = 8;
-    let baseUrl = "https://gateway.marvel.com:443/v1/public/characters";
+  // Rutina que trae personajes
+  // Se ejecuta al inciar y cada vez que se escribe en el buscador
+  getHeroes(HeroesName) {
+    const apikey = "244d171c01b75643f3d17d51e3c13238";
+    const privatekey = "b06821a19c58afa31fb67fb0a699b64efd2b0d5f";
+    const ts = new Date().getTime();
+    const stringToHash = ts + privatekey + apikey;
+    const hash = md5(stringToHash);
+    const limit = 8;
+    const baseUrl = "https://gateway.marvel.com:443/v1/public/characters";
 
     let url = `${baseUrl}?ts=${ts}&apikey=${apikey}&hash=${hash}&limit=${limit}`;
 
@@ -69,23 +67,21 @@ export default class Seeker extends React.Component{
     fetch(url)
       .then(res => res.json())
       .then(res => {
-        //Actualizo Provider (asi el resto de componentes lo pueden consumir)
+        // Actualizo Provider (asi el resto de componentes lo pueden consumir)
         this.context.setHeroes(res.data.results);
       })
       .catch(e => console.log(e));
   }
 
-  
-  render(){
-   return(
-    <ContainerInput>
-      <Lupa>
-        <img src={require("../../assets/images/lupa.jpg")} alt={"search"}/>
-      </Lupa>
-      {/* actualizo la busqueda con cada cambio */}
-      <input autoFocus onChange={e => this.getHeroes(e.target.value)} />
-    </ContainerInput>)
+  render() {
+    return (
+      <ContainerInput>
+        <Lupa>
+          <img src={require("../../assets/images/lupa.jpg")} alt="search" />
+        </Lupa>
+        {/* actualizo la busqueda con cada cambio */}
+        <input autoFocus onChange={e => this.getHeroes(e.target.value)} />
+      </ContainerInput>
+    );
   }
-  
- 
 }
