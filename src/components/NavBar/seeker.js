@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import ProviderHero from "../ProviderHero/index";
-
-const md5 = require("md5");
+import { getCredentials } from "../../credentials";
+import axios from "axios";
 
 const Lupa = styled.div`
   display: flex;
@@ -50,27 +50,28 @@ export default class Seeker extends React.Component {
   // Rutina que trae personajes
   // Se ejecuta al inciar y cada vez que se escribe en el buscador
   getHeroes(HeroesName) {
-    const apikey = "244d171c01b75643f3d17d51e3c13238";
-    const privatekey = "b06821a19c58afa31fb67fb0a699b64efd2b0d5f";
-    const ts = new Date().getTime();
-    const stringToHash = ts + privatekey + apikey;
-    const hash = md5(stringToHash);
     const limit = 8;
-    const baseUrl = "https://gateway.marvel.com:443/v1/public/characters";
+    const url = "https://gateway.marvel.com:443/v1/public/characters";
 
-    let url = `${baseUrl}?ts=${ts}&apikey=${apikey}&hash=${hash}&limit=${limit}`;
+    let params = {
+      ...getCredentials(),
+      limit
+    };
 
     if (HeroesName !== "") {
-      url = url.concat(`&nameStartsWith=${HeroesName}`);
+      params = { ...params, nameStartsWith: HeroesName };
     }
 
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        // Actualizo Provider (asi el resto de componentes lo pueden consumir)
-        this.context.setHeroes(res.data.results);
+    axios
+      .get(url, {
+        params: params
       })
-      .catch(e => console.log(e));
+      .then(res => {
+        this.context.setHeroes(res.data.data.results);
+      })
+      .catch(error => {
+        this.context.setHeroes([]);
+      });
   }
 
   render() {

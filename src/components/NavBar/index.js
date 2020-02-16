@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import ButtonTheme from "./ButtonTheme";
-import Seeker from "./seeker";
+import React from 'react'
+import styled from 'styled-components'
+import ButtonTheme from './ButtonTheme'
+import Seeker from './seeker'
 
-const Logo = styled.div``;
-const ContainerButton = styled.div``;
+const Logo = styled.div``
+const ContainerButton = styled.div``
 // Cards
 const NavBar = styled.nav`
   display: flex;
@@ -29,16 +29,19 @@ const NavBar = styled.nav`
       max-width: 100px;
     }
   }
-`;
+`
 
-export default () => (
-  <NavBar>
-    <Logo>
-      <img src={require("../../assets/images/logo-marvel.png")} alt="logo" />
-    </Logo>
-    <Seeker />
-    <ContainerButton>
-      <ButtonTheme />
-    </ContainerButton>
-  </NavBar>
-);
+export default Object.assign(
+  () => (
+    <NavBar>
+      <Logo>
+        <img src={require('../../assets/images/logo-marvel.png')} alt="logo" />
+      </Logo>
+      <Seeker />
+      <ContainerButton>
+        <ButtonTheme />
+      </ContainerButton>
+    </NavBar>
+  ),
+  { displayName: 'NavBar' }
+)

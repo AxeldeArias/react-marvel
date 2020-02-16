@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
-import styled, { ThemeContext } from "styled-components";
-import { THEME } from "../themes";
+import React, { useContext, useState } from 'react'
+import styled, { ThemeContext } from 'styled-components'
+import { THEME } from '../themes'
 
 const ButtonTheme = styled.button`
   text-decoration: none;
@@ -17,25 +17,28 @@ const ButtonTheme = styled.button`
     background-color: #ffffff;
     text-decoration: none;
   }
-`;
+`
 
-export default () => {
-  const themeContext = useContext(ThemeContext);
-  const [state, setState] = useState(THEME.dark);
+export default Object.assign(
+  () => {
+    const themeContext = useContext(ThemeContext)
+    const [state, setState] = useState(themeContext.default)
 
-  const updateState = () => {
-    if (state === THEME.dark) {
-      setState(THEME.light);
-      themeContext.changeTheme(THEME.light);
-    } else if (state === THEME.light) {
-      setState(THEME.dark);
-      themeContext.changeTheme(THEME.dark);
+    const updateState = () => {
+      if (state === THEME.dark) {
+        setState(THEME.light)
+        themeContext.changeTheme(THEME.light)
+      } else if (state === THEME.light) {
+        setState(THEME.dark)
+        themeContext.changeTheme(THEME.dark)
+      }
     }
-  };
 
-  return (
-    <ButtonTheme onClick={() => updateState()}>
-      {state === THEME.dark ? "Modo Claro" : "Modo Oscuro"}
-    </ButtonTheme>
-  );
-};
+    return (
+      <ButtonTheme onClick={() => updateState()}>
+        {state === THEME.dark ? 'Modo Claro' : 'Modo Oscuro'}
+      </ButtonTheme>
+    )
+  },
+  { displayName: 'ButtonTheme' }
+)

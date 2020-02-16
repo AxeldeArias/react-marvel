@@ -1,44 +1,172 @@
-import React, { useContext, useEffect } from "react";
-import styled from "styled-components";
+import React from "react";
 import ProviderHero from "../ProviderHero/index";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaRegWindowClose } from "react-icons/fa";
+import ListComics from "./ListComics";
+import styled from "styled-components";
+import Card from "../card";
+import axios from "axios";
+import { getCredentials } from "../../credentials";
+
+const ContainerDet = styled.section`
+  display: flex;
+  justify-content: space-around;
+  & article:nth-child(1) {
+    flex: 30% 0 0;
+  }
+  & article:nth-child(2) {
+    flex: 70% 0 0;
+  }
+
+  @media screen and (max-width: ${props => props.theme.desktop}) {
+    flex-wrap: wrap;
+    & article:nth-child(1) {
+      flex: 100% 0 0;
+    }
+    & article:nth-child(2) {
+      flex: 100% 0 0;
+    }
+  }
+`;
+const ContainerFlex = styled.article`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Text = styled.div``;
+const Title = styled.div`
+  font-size: 1.8rem;
+  font-weight: bold;
+`;
 
 const ContainerModal = styled.div`
   position: fixed;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  opacity: 0.8;
-  background: ${props => props.theme.secondary};
+  background: rgba(0, 0, 0, 0.4);
 `;
 const BoxModal = styled.div`
-  margin: auto;
   position: relative;
-  background: ${props => props.theme.tertiary};
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: ${props => props.theme.secondary};
+  & svg {
+    color: ${props => props.theme.quaternary};
+    font-size: 3rem;
+  }
+  @media screen and (min-width: ${props => props.theme.desktop}) {
+    flex: 800px 0 0;
+    margin-top: 50px;
+  }
+
+  @media screen and (max-width: ${props => props.theme.desktop}) {
+    flex: 85% 0 0;
+    margin: auto;
+  }
+  & div {
+    padding: 5px;
+  }
 `;
 const Exit = styled.div`
   position: absolute;
   right: 0px;
   top: 0px;
 `;
-export default () => {
-  const themeContext = useContext(ProviderHero);
 
-  const hero = themeContext.listHeroes.filter(
-    hero => hero.id === themeContext.modalIdHero
-  );
-  if (hero.length > 0) {
-    console.warn(hero);
+export default class Modal extends React.Component {
+  static contextType = ProviderHero;
+  _isMounted = false;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      hero: null,
+      loading: true,
+      comics: []
+    };
   }
-  return (
-    <ContainerModal>
-      <BoxModal>
-        <Exit>
-          <FaSignOutAlt color={"red"} />
-        </Exit>
-        {hero.length > 0 ? <div>{hero[0].name}</div> : null}}
-      </BoxModal>
-    </ContainerModal>
-  );
-};
+  componentDidMount() {
+    this._isMounted = true;
+    const hero = this.context.listHeroes.filter(
+      hero => hero.id === this.context.modalIdHero
+    );
+    this.setState({ hero: hero[0] }, () => {
+      if (hero.length > 0) {
+        const url = `https://gateway.marvel.com:443/v1/public/characters/${this.state.hero.id}/comics`;
+        axios
+          .get(url, {
+            params: getCredentials()
+          })
+          .then(response => {
+            if (this._isMounted) {
+              this.setState({
+                loading: false,
+                comics: response.data.data.results
+              });
+            }
+          })
+          .catch(error => {
+            if (this._isMounted) {
+              this.setState({ loading: false, comics: [] });
+            }
+          });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  closeModal = event => {
+    this.context.setModal({
+      modalVisible: false,
+      modalIdHero: null
+    });
+    this.setState({ loading: true, comics: [] });
+  };
+
+  render() {
+    const { hero, comics, loading } = this.state;
+    return (
+      <ContainerModal
+        onClick={e => {
+          if (e.target === e.currentTarget) this.closeModal(e);
+        }}
+      >
+        <BoxModal>
+          <Exit
+            onClick={e => {
+              this.closeModal(e);
+            }}
+          >
+            <FaRegWindowClose />
+          </Exit>
+          {hero ? (
+            <ContainerDet>
+              <Card>{hero}</Card>
+              <ContainerFlex>
+                <Title>
+                  <div>{hero.name}</div>
+                </Title>
+                <Text>
+                  {hero.length > 0 && hero.description
+                    ? hero.description
+                    : "Heroe sin Descripción"}
+                </Text>
+              </ContainerFlex>
+            </ContainerDet>
+          ) : (
+            <div></div>
+          )}
+          {!loading ? <ListComics comics={comics} /> : <div>Cargando...</div>}
+        </BoxModal>
+      </ContainerModal>
+    );
+  }
+}

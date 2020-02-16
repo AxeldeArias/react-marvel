@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import ProviderHero from "./ProviderHero/index";
-import ListItems from "./ListItems";
-import NavBar from "./NavBar/index";
-import Modal from "./Modal/index";
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import ProviderHero from './ProviderHero/index'
+import ListItems from './ListItems'
+import NavBar from './NavBar/index'
+import Modal from './Modal/index'
 
 const MainContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
 const Container = styled.div`
   margin: auto;
@@ -24,7 +24,7 @@ const Container = styled.div`
     min-width: 700px;
     margin: auto;
   }
-`;
+`
 
 const ContainerList = styled.div`
   flex: 1;
@@ -33,14 +33,14 @@ const ContainerList = styled.div`
   padding-top: 5px;
   flex-direction: column;
   justify-content: flex-start;
-`;
+`
 
 export default () => {
-  const [listHeroes, setHeroes] = useState([]);
+  const [listHeroes, setHeroes] = useState([])
   const [modal, setModal] = useState({
     modalVisible: false,
     modalIdHero: null
-  });
+  })
 
   return (
     <ProviderHero.Provider
@@ -61,5 +61,5 @@ export default () => {
         {modal.modalVisible ? <Modal /> : null}
       </MainContainer>
     </ProviderHero.Provider>
-  );
-};
+  )
+}

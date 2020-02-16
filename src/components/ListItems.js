@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
-import Card from "./card";
-import ProviderHero from "./ProviderHero/index";
+import React, { useContext } from 'react'
+import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import Card from './card'
+import ProviderHero from './ProviderHero/index'
 
 // Contenedor de Cards
 const ContainerHero = styled.section`
@@ -40,20 +40,19 @@ const ContainerHero = styled.section`
       flex: 100% 0 0;
     }
   }
-`;
+`
 
 export default Object.assign(
   () => {
-    const providerHero = useContext(ProviderHero);
+    const providerHero = useContext(ProviderHero)
 
     return (
       <ContainerHero>
-        {console.log(providerHero.listHeroes)}
         {providerHero.listHeroes.map(element => (
           <Card key={String(element.id)}>{element}</Card>
         ))}
       </ContainerHero>
-    );
+    )
   },
   { propTypes: { children: PropTypes.node } }
-);
+)
