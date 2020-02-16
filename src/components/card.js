@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import ProviderHero from './ProviderHero/index'
+import React, { useContext } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import ProviderHero from "./ProviderHero/index";
 
 const ContainerHero = styled.div`
   display: flex;
@@ -28,11 +28,12 @@ const ContainerHero = styled.div`
     font-weight: bold;
   }
   div {
+    padding: 2px;
     max-height: 1.5rem;
     min-height: 1.5rem;
     overflow: hidden;
   }
-`
+`;
 
 // Cards
 const Card = styled.article`
@@ -44,29 +45,29 @@ const Card = styled.article`
   img {
     margin: auto;
   }
-`
+`;
 
 export default Object.assign(
   props => {
-    const providerHero = useContext(ProviderHero)
-    const { name, thumbnail, id } = props.children
+    const providerHero = useContext(ProviderHero);
+    const { name, thumbnail, id } = props.children;
     // genero la ruta de la imagen
-    const imagen = `${thumbnail.path}/portrait_xlarge.${thumbnail.extension}`
+    const imagen = `${thumbnail.path}/portrait_xlarge.${thumbnail.extension}`;
     return (
-      <Card
-        onClick={() => {
-          providerHero.setModal({
-            modalVisible: true,
-            modalIdHero: id
-          })
-        }}
-      >
-        <ContainerHero>
+      <Card>
+        <ContainerHero
+          onClick={() => {
+            providerHero.setModal({
+              modalVisible: true,
+              modalIdHero: id
+            });
+          }}
+        >
           <img src={imagen} alt="Hero" />
           <div>{name}</div>
         </ContainerHero>
       </Card>
-    )
+    );
   },
   {
     propTypes: {
@@ -75,4 +76,4 @@ export default Object.assign(
       id: PropTypes.string
     }
   }
-)
+);
