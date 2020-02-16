@@ -1,11 +1,11 @@
-import React from "react";
-import ProviderHero from "../ProviderHero/index";
-import { FaRegWindowClose } from "react-icons/fa";
-import ListComics from "./ListComics";
-import styled from "styled-components";
-import Card from "../card";
-import axios from "axios";
-import { getCredentials } from "../../credentials";
+import React from 'react'
+import ProviderHero from '../ProviderHero/index'
+import { FaRegWindowClose } from 'react-icons/fa'
+import ListComics from './ListComics'
+import styled from 'styled-components'
+import Card from '../card'
+import axios from 'axios'
+import { getCredentials } from '../../credentials'
 
 const ContainerDet = styled.section`
   display: flex;
@@ -26,17 +26,17 @@ const ContainerDet = styled.section`
       flex: 100% 0 0;
     }
   }
-`;
+`
 const ContainerFlex = styled.article`
   display: flex;
   flex-direction: column;
-`;
+`
 
-const Text = styled.div``;
+const Text = styled.div``
 const Title = styled.div`
   font-size: 1.8rem;
   font-weight: bold;
-`;
+`
 
 const ContainerModal = styled.div`
   position: fixed;
@@ -48,7 +48,7 @@ const ContainerModal = styled.div`
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
-`;
+`
 const BoxModal = styled.div`
   position: relative;
   padding: 20px;
@@ -71,33 +71,34 @@ const BoxModal = styled.div`
   & div {
     padding: 5px;
   }
-`;
+`
 const Exit = styled.div`
   position: absolute;
   right: 0px;
   top: 0px;
-`;
+`
 
 export default class Modal extends React.Component {
   static contextType = ProviderHero;
   _isMounted = false;
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       hero: null,
       loading: true,
       comics: []
-    };
+    }
   }
-  componentDidMount() {
-    this._isMounted = true;
+
+  componentDidMount () {
+    this._isMounted = true
     const hero = this.context.listHeroes.filter(
       hero => hero.id === this.context.modalIdHero
-    );
+    )
     this.setState({ hero: hero[0] }, () => {
       if (hero.length > 0) {
-        const url = `https://gateway.marvel.com:443/v1/public/characters/${this.state.hero.id}/comics`;
+        const url = `https://gateway.marvel.com:443/v1/public/characters/${this.state.hero.id}/comics`
         axios
           .get(url, {
             params: getCredentials()
@@ -107,42 +108,43 @@ export default class Modal extends React.Component {
               this.setState({
                 loading: false,
                 comics: response.data.data.results
-              });
+              })
             }
           })
           .catch(error => {
             if (this._isMounted) {
-              this.setState({ loading: false, comics: [] });
+              this.setState({ loading: false, comics: [] })
             }
-          });
+            console.log(error)
+          })
       }
-    });
+    })
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
+  componentWillUnmount () {
+    this._isMounted = false
   }
 
   closeModal = event => {
     this.context.setModal({
       modalVisible: false,
       modalIdHero: null
-    });
-    this.setState({ loading: true, comics: [] });
+    })
+    this.setState({ loading: true, comics: [] })
   };
 
-  render() {
-    const { hero, comics, loading } = this.state;
+  render () {
+    const { hero, comics, loading } = this.state
     return (
       <ContainerModal
         onClick={e => {
-          if (e.target === e.currentTarget) this.closeModal(e);
+          if (e.target === e.currentTarget) this.closeModal(e)
         }}
       >
         <BoxModal>
           <Exit
             onClick={e => {
-              this.closeModal(e);
+              this.closeModal(e)
             }}
           >
             <FaRegWindowClose />
@@ -157,7 +159,7 @@ export default class Modal extends React.Component {
                 <Text>
                   {hero.length > 0 && hero.description
                     ? hero.description
-                    : "Heroe sin Descripción"}
+                    : 'Heroe sin Descripción'}
                 </Text>
               </ContainerFlex>
             </ContainerDet>
@@ -167,6 +169,6 @@ export default class Modal extends React.Component {
           {!loading ? <ListComics comics={comics} /> : <div>Cargando...</div>}
         </BoxModal>
       </ContainerModal>
-    );
+    )
   }
 }

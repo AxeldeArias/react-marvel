@@ -1,14 +1,14 @@
-import React from "react";
-import styled from "styled-components";
-import ProviderHero from "../ProviderHero/index";
-import { getCredentials } from "../../credentials";
-import axios from "axios";
+import React from 'react'
+import styled from 'styled-components'
+import ProviderHero from '../ProviderHero/index'
+import { getCredentials } from '../../credentials'
+import axios from 'axios'
 
 const Lupa = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+`
 const ContainerInput = styled.div`
   position: relative;
   flex-basis: 70%;
@@ -38,28 +38,28 @@ const ContainerInput = styled.div`
       width: 25px;
     }
   }
-`;
+`
 
 export default class Seeker extends React.Component {
   static contextType = ProviderHero;
 
-  componentDidMount() {
-    this.getHeroes("");
+  componentDidMount () {
+    this.getHeroes('')
   }
 
   // Rutina que trae personajes
   // Se ejecuta al inciar y cada vez que se escribe en el buscador
-  getHeroes(HeroesName) {
-    const limit = 8;
-    const url = "https://gateway.marvel.com:443/v1/public/characters";
+  getHeroes (HeroesName) {
+    const limit = 8
+    const url = 'https://gateway.marvel.com:443/v1/public/characters'
 
     let params = {
       ...getCredentials(),
       limit
-    };
+    }
 
-    if (HeroesName !== "") {
-      params = { ...params, nameStartsWith: HeroesName };
+    if (HeroesName !== '') {
+      params = { ...params, nameStartsWith: HeroesName }
     }
 
     axios
@@ -67,22 +67,23 @@ export default class Seeker extends React.Component {
         params: params
       })
       .then(res => {
-        this.context.setHeroes(res.data.data.results);
+        this.context.setHeroes(res.data.data.results)
       })
       .catch(error => {
-        this.context.setHeroes([]);
-      });
+        this.context.setHeroes([])
+        console.log(error)
+      })
   }
 
-  render() {
+  render () {
     return (
       <ContainerInput>
         <Lupa>
-          <img src={require("../../assets/images/lupa.jpg")} alt="search" />
+          <img src={require('../../assets/images/lupa.jpg')} alt="search" />
         </Lupa>
         {/* actualizo la busqueda con cada cambio */}
         <input autoFocus onChange={e => this.getHeroes(e.target.value)} />
       </ContainerInput>
-    );
+    )
   }
 }
